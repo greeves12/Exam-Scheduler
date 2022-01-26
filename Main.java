@@ -12,6 +12,7 @@ public class Main {
         ArrayList<Room> rooms = new ArrayList<>();
         ArrayList<Course> courses = new ArrayList<>();
 
+
         System.out.println("Exam Scheduler");
 
         while (running){
@@ -49,15 +50,31 @@ public class Main {
                                                 break;
                                             }
                                         }
+                                        if(errorFlag)
+                                            break;
 
                                         data = sc.next();
                                         while (Character.isDigit(data.charAt(0))) {
+                                            if(!allNumbers(data)){
+                                                errorFlag = true;
+                                                errorMessage = "ERROR: StudentID contains non-digit";
+
+                                                break;
+                                            }
+
                                             if (Integer.parseInt(data) < 0) {
                                                 //  System.out.println("ERROR: Negative studentID in " + courseName);
                                                 errorFlag = true;
                                                 errorMessage = "ERROR: Negative studentID in " + courseName;
                                                 break;
                                             }
+
+                                            if(students.contains(Integer.valueOf(data))){
+                                                errorFlag = true;
+                                                errorMessage = "ERROR: Duplicate students in a class found.";
+                                                break;
+                                            }
+
                                             students.add(Integer.valueOf(data));
                                             if (!sc.hasNext()) {
                                                 break;
@@ -65,7 +82,6 @@ public class Main {
                                             data = sc.next();
                                         }
                                         if (errorFlag) {
-                                            System.out.println(errorMessage);
                                             break;
                                         }
                                         courses.add(new Course(courseName, students));
@@ -88,9 +104,20 @@ public class Main {
                             if(!errorFlag){
                                 sc = new Scanner(roomFile);
                                 if(!sc.hasNext()){
-
+                                    errorFlag = true;
+                                    errorMessage = "ERROR: Rooms file is empty.";
                                 }else {
-                                    String data = sc.next();
+                                    while (sc.hasNextLine()) {
+                                        String[] roomLine = sc.nextLine().split("\t");
+
+                                        System.out.println(roomLine.length);
+                                        if(roomLine.length == 1){
+                                            errorFlag = true;
+                                            errorMessage = "ERROR: Invalid room.";
+                                            break;
+                                        }
+                                    }
+
                                 }
 
                             }
@@ -98,9 +125,9 @@ public class Main {
                             if(errorFlag) {
                                 System.out.println(errorMessage);
                                 errorFlag = false;
+                            }else{
+                                //execute exam formation
                             }
-
-
 
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
@@ -121,4 +148,12 @@ public class Main {
         scanner.close();
     }
 
+    private static boolean allNumbers(String s){
+        for(int x = 0; x < s.length(); x++){
+            if(!Character.isDigit(s.charAt(x))){
+                return false;
+            }
+        }
+        return true;
+    }
 }
