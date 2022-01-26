@@ -31,48 +31,76 @@ public class Main {
                     if(slots > 0){
                         try {
                             Scanner sc = new Scanner(courseFile);
-                            String data = sc.next();
-                            while (sc.hasNext()){
 
-                                String courseName;
-                                ArrayList<Integer> students = new ArrayList<>();
+                            if(sc.hasNext()) {
+                                String data = sc.next();
+                                while (sc.hasNext()) {
 
-                                if(Character.isLetter(data.charAt(0))){
-                                    courseName = data;
-                                    for(int x = 0; x < courses.size(); x++){
-                                        if(courses.get(x).getName().equals(data)){
-                                            return;
-                                           // System.out.println("ERROR: Duplicate course name found.");
-                                          /*  errorFlag = true;
-                                            errorMessage = "ERROR: Duplicate course name found.";
-                                            re
+                                    String courseName;
+                                    ArrayList<Integer> students = new ArrayList<>();
 
-                                        */}
-                                    }
-
-                                    data = sc.next();
-                                    while (Character.isDigit(data.charAt(0))) {
-                                        if(Integer.parseInt(data) < 0 ){
-                                            System.out.println("ERROR: Negative studentID in " + courseName);
-                                            return;
+                                    if (Character.isLetter(data.charAt(0))) {
+                                        courseName = data;
+                                        for (int x = 0; x < courses.size(); x++) {
+                                            if (courses.get(x).getName().equals(data)) {
+                                                // System.out.println("ERROR: Duplicate course name found.");
+                                                errorFlag = true;
+                                                errorMessage = "ERROR: Duplicate course name found.";
+                                                break;
+                                            }
                                         }
-                                        students.add(Integer.valueOf(data));
-                                        if(!sc.hasNext()){
+
+                                        data = sc.next();
+                                        while (Character.isDigit(data.charAt(0))) {
+                                            if (Integer.parseInt(data) < 0) {
+                                                //  System.out.println("ERROR: Negative studentID in " + courseName);
+                                                errorFlag = true;
+                                                errorMessage = "ERROR: Negative studentID in " + courseName;
+                                                break;
+                                            }
+                                            students.add(Integer.valueOf(data));
+                                            if (!sc.hasNext()) {
+                                                break;
+                                            }
+                                            data = sc.next();
+                                        }
+                                        if (errorFlag) {
+                                            System.out.println(errorMessage);
                                             break;
                                         }
-                                        data = sc.next();
-                                    }
-                                    if(errorFlag){
-                                        System.out.println(errorMessage);
+                                        courses.add(new Course(courseName, students));
+                                        System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
+                                    } else {
+                                        //   System.out.println("ERROR: Non Letter Course");
+                                        errorFlag = true;
+                                        errorMessage = "ERROR: Non Letter Course";
                                         break;
                                     }
-                                    courses.add(new Course(courseName, students));
-                                    System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
-                                }else{
-                                    System.out.println("ERROR: Non Letter Course");
-                                    return;
                                 }
+                            }else{
+                                errorFlag = true;
+                                errorMessage = "ERROR: Courses file is empty";
                             }
+
+                            sc.close();
+
+
+                            if(!errorFlag){
+                                sc = new Scanner(roomFile);
+                                if(!sc.hasNext()){
+
+                                }else {
+                                    String data = sc.next();
+                                }
+
+                            }
+
+                            if(errorFlag) {
+                                System.out.println(errorMessage);
+                                errorFlag = false;
+                            }
+
+
 
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
