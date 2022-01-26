@@ -24,8 +24,8 @@ public class Main {
             }
 
             String[] arg = line.split(" ");
-            File courseFile = new File("testdata/" + arg[0]);
-            File roomFile = new File("testdata/" + arg[1]);
+            File courseFile = new File("test data/" + arg[0]);
+            File roomFile = new File("test data/" + arg[1]);
             int slots = Integer.parseInt(arg[2]);
             if(courseFile.exists()){
                 if(roomFile.exists()){
@@ -108,14 +108,38 @@ public class Main {
                                     errorMessage = "ERROR: Rooms file is empty.";
                                 }else {
                                     while (sc.hasNextLine()) {
-                                        String[] roomLine = sc.nextLine().split("\t");
+                                        String[] roomLine = sc.nextLine().split("\s+|\t+");
 
-                                        System.out.println(roomLine.length);
                                         if(roomLine.length == 1){
                                             errorFlag = true;
                                             errorMessage = "ERROR: Invalid room.";
                                             break;
                                         }
+
+                                        if(!allNumbers(roomLine[1])){
+                                            errorFlag = true;
+                                            errorMessage = "ERROR: Room has non digits.";
+                                            break;
+                                        }else if(Integer.parseInt(roomLine[1]) < 0){
+                                            errorFlag = true;
+                                            errorMessage = "ERROR: Room is a negative number.";
+                                            break;
+                                        }
+
+                                        for(int x = 0; x < rooms.size(); x++){
+                                            if(rooms.get(0).getName().equals(roomLine[0])){
+                                                errorFlag = true;
+                                                errorMessage = "ERROR: Duplicate rooms found.";
+                                                break;
+                                            }
+                                        }
+
+                                        if(errorFlag){
+                                            break;
+                                        }
+
+                                        System.out.println("PASS: Loaded room " + roomLine[0] + " with capacity " + roomLine[1]);
+                                        rooms.add(new Room(roomLine[0],Integer.parseInt(roomLine[1])));
                                     }
 
                                 }
@@ -124,6 +148,7 @@ public class Main {
 
                             if(errorFlag) {
                                 System.out.println(errorMessage);
+                                System.out.println("----- Exam Maker Cancelled Due To Error -----");
                                 errorFlag = false;
                             }else{
                                 //execute exam formation
