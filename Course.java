@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Course {
-    String name;
-    ArrayList<Integer> students;
+    private String name;
+    private ArrayList<Integer> students;
 
     public Course(String name, ArrayList<Integer> students){
         this.name = name;

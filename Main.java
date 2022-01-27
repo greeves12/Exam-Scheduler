@@ -32,8 +32,8 @@ public class Main {
     }
 
     private static void runDataFetch(String[] arg){
-        ArrayList<Room> rooms = new ArrayList<>();
-        ArrayList<Course> courses = new ArrayList<>();
+        ArrayList<Room> rooms;
+        ArrayList<Course> courses;
 
         File courseFile = new File("test data/" + arg[0]);
         File roomFile = new File("test data/" + arg[1]);
@@ -41,13 +41,13 @@ public class Main {
         if(courseFile.exists()){
             if(roomFile.exists()){
                 if(slots > 0){
-                    fetchCourses(courseFile);
+                    courses = fetchCourses(courseFile);
 
                     if(!errorFlag) {
-                        fetchRooms(roomFile);
+                        rooms = fetchRooms(roomFile);
 
                         if(!errorFlag){
-                            //execute graph
+                            new Graph(courses, rooms);
 
                             System.out.println("------ Time Slots ------");
                         }
@@ -65,9 +65,6 @@ public class Main {
         }else{
             System.out.println("ERROR: Course file does not exist.");
         }
-
-        courses.clear();
-        rooms.clear();
     }
 
     private static ArrayList<Course> fetchCourses(File courseFile){
