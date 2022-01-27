@@ -65,9 +65,10 @@ public class Graph implements GraphInterface{
 
                             List<Vertex> list = graph.get(vertex);
 
-                            list.add(vertex1);
-
-                            graph.put(vertex, list);
+                            if(!list.contains(vertex1)) {
+                                list.add(vertex1);
+                                graph.put(vertex, list);
+                            }
 
                             System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
 
