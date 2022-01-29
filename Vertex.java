@@ -1,6 +1,6 @@
 public class Vertex {
     private String courseName;
-    private int color;
+    private int color = 0;
 
     public Vertex(String courseName){
         this.courseName = courseName;

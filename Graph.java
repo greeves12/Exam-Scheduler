@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /*
 * NOTE: For this graph data structure, the vertex is the key to unlocking the adjacent vertices, thus
@@ -18,16 +15,31 @@ import java.util.Map;
 * connects vertices if need be.
 * */
 
+/*
+* TODO:
+*  - Coloring algorithm (COMPLETE)
+*  - Need to filter duplicates still (What I mean is that my algorithm always creates the least colors so we need to
+*    filter the duplicates and make them their own color, so if a time slot of 5 is requested and we use 2 colors, then
+*    one color has 3 vertices and the other has 2, such that we need to take at least 3 vertices and make them their own
+*    colors to fill 5 time slots.) PM me on discord if this doesn't make sense.
+*
+* */
+
 public class Graph implements GraphInterface{
     private final ArrayList<Course> courses;
     private final ArrayList<Room> rooms;
     private Map<Vertex, List<Vertex>> graph = new HashMap<>();
     private ArrayList<Vertex> vertices = new ArrayList<>();
+    private final int maxColors;
 
+    public Map<Vertex, List<Vertex>> getGraph() {
+        return graph;
+    }
 
-    public Graph(ArrayList<Course> courses, ArrayList<Room> rooms){
+    public Graph(ArrayList<Course> courses, ArrayList<Room> rooms, int maxColors){
         this.courses = courses;
         this.rooms = rooms;
+        this.maxColors = maxColors;
 
         createGraph();
     }
@@ -45,6 +57,7 @@ public class Graph implements GraphInterface{
     }
 
     private void createGraph(){
+        int colors = 0;
         ArrayList<Course> courses = getCourses();
 
         for(Course c : courses){
@@ -53,6 +66,7 @@ public class Graph implements GraphInterface{
 
             graph.put(v, new ArrayList<>());
         }
+
 
         for(Course c : courses){
             Vertex vertex = getVertex(c.getName());
@@ -68,9 +82,10 @@ public class Graph implements GraphInterface{
                             if(!list.contains(vertex1)) {
                                 list.add(vertex1);
                                 graph.put(vertex, list);
+                                System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
                             }
 
-                            System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
+
 
                             break;
                         }
@@ -78,6 +93,216 @@ public class Graph implements GraphInterface{
                 }
             }
         }
+
+        ArrayList<Vertex> vert = colorVertices();
+
+        for(Vertex v : vert){
+            System.out.println("Course: " + v.getCourseName() + " Color: " + v.getColor());
+            if(v.getColor() > colors){
+                colors = v.getColor();
+            }
+        }
+/*
+        if(colors > getMaxColors()){
+            System.out.println("ERROR: Time conflict results with " + getMaxColors() + " time slots.");
+        }else if(colors < getMaxColors()){
+            ArrayList<Vertex> newColors = generateNewColors(vert);
+
+            for(Vertex v : newColors){
+                System.out.println("Course: " + v.getCourseName() + " Color: " + v.getColor());
+            }
+        }*/
+    }
+
+    private ArrayList<Vertex> generateNewColors(ArrayList<Vertex> vertices){
+        ArrayList<Vertex> newColors = new ArrayList<>();
+        HashMap<Integer, ArrayList<Vertex>> duplicates = new HashMap<>();
+        HashMap<Integer, ArrayList<Vertex>> temp = new HashMap<>();
+        int degree;
+        int colors;
+
+
+        for(Vertex v : vertices){
+            ArrayList<Vertex> v3;
+
+            if(!duplicates.containsKey(v.getColor())){
+                v3 = new ArrayList<>();
+            }else{
+                v3 = duplicates.get(v.getColor());
+            }
+            v3.add(v);
+            duplicates.put(v.getColor(), v3);
+        }
+
+        degree = highestDegree(duplicates) + 1;
+        colors = degree;
+
+        colors = (getMaxColors()) - colors;
+
+        for (Map.Entry<Integer, ArrayList<Vertex>> entry : duplicates.entrySet()) {
+            if (colors >= 0) {
+                while (entry.getValue().size() > 1) {
+                    ArrayList<Vertex> newVertex = new ArrayList<>();
+                    entry.getValue().get(0).setColor(degree);
+                    newVertex.add(entry.getValue().get(0));
+                    entry.getValue().remove(0);
+
+
+                    temp.put(degree, newVertex);
+                    colors--;
+                    degree++;
+                }
+            } else {
+                break;
+            }
+        }
+
+        for(Map.Entry<Integer, ArrayList<Vertex>> entry : temp.entrySet()){
+            duplicates.put(entry.getKey(), entry.getValue());
+        }
+
+        if(colors > 0){
+            System.out.println("Impossible to make time table");
+        }else{
+            for(Map.Entry<Integer, ArrayList<Vertex>> entry : duplicates.entrySet()){
+                newColors.addAll(entry.getValue());
+            }
+        }
+
+        return newColors;
+    }
+
+    public int getMaxColors() {
+        return maxColors;
+    }
+
+    private int highestDegree(HashMap<Integer, ArrayList<Vertex>> v){
+        int degree = 0;
+
+        for(Map.Entry<Integer, ArrayList<Vertex>> entry : v.entrySet()){
+            if(entry.getKey() > degree){
+                degree = entry.getKey();
+            }
+        }
+
+        return degree;
+    }
+
+    private int minDegree(HashMap<Integer, ArrayList<Vertex>> v){
+        int degree = 10000;
+
+        for(Map.Entry<Integer, ArrayList<Vertex>> entry : v.entrySet()){
+            if(entry.getKey() < degree){
+                degree = entry.getKey();
+            }
+        }
+
+        return degree;
+    }
+
+    private ArrayList<Vertex> colorVertices(){
+      ArrayList<Vertex> coloredVertices = new ArrayList<>();
+      ArrayList<Vertex> nonColored = new ArrayList<>(vertices);
+      int color = 2;
+      int highestDegree;
+      int minDegree;
+      HashMap<Integer, ArrayList<Vertex>> verticesByDegree = new HashMap<>();
+
+      for(Vertex v : nonColored){
+          if(!verticesByDegree.containsKey(getGraph().get(v).size())){
+              ArrayList<Vertex> v23 = new ArrayList<>();
+              v23.add(v);
+              verticesByDegree.put(getGraph().get(v).size(), v23);
+
+          }else{
+              ArrayList<Vertex> retrieved = verticesByDegree.get(getGraph().get(v).size());
+              retrieved.add(v);
+              verticesByDegree.put(getGraph().get(v).size(), retrieved);
+
+          }
+      }
+
+
+      highestDegree = highestDegree(verticesByDegree);
+      minDegree = minDegree(verticesByDegree);
+
+      if(highestDegree > 0) {
+          ArrayList<Vertex> v1 = verticesByDegree.get(highestDegree);
+
+          Vertex v2 = v1.get(0);
+          v2.setColor(color);
+          coloredVertices.add(v2);
+
+          v1.remove(v2);
+
+          verticesByDegree.put(highestDegree, v1);
+
+          while (highestDegree > 0 && highestDegree >= minDegree) {
+                ArrayList<Vertex> v = verticesByDegree.get(highestDegree);
+                color--;
+                while (!v.isEmpty()){
+
+                    for(int x = 0; x < v.size(); x++){
+                        List<Vertex> adjacentToV = getGraph().get(v.get(x));
+                        boolean addColor = true;
+
+
+                        for (int i = 0; i < adjacentToV.size(); i++) {
+                            if(coloredVertices.contains(adjacentToV.get(i))) {
+
+                                Vertex vert = null;
+                                for(int t = 0; t < coloredVertices.size(); t++){
+                                    if(coloredVertices.get(t).getCourseName().equals(adjacentToV.get(i).getCourseName())){
+                                        vert = coloredVertices.get(t);
+                                        break;
+                                    }
+                                }
+
+                                boolean flag = false;
+                                if(v.get(x).getColor() == 0) {
+                                    v.get(x).setColor(color);
+                                    flag = true;
+                                }
+
+                                if (vert.getColor() == color) {
+                                    addColor = false;
+
+                                }
+
+                                if(flag){
+                                    v.get(x).setColor(0);
+                                }
+
+                            }
+                        }
+
+
+                        if(addColor){
+                            v.get(x).setColor(color);
+                            coloredVertices.add(v.get(x));
+                            v.remove(x);
+
+                            verticesByDegree.put(highestDegree, v);
+                        }
+                    }
+                    color++;
+
+                }
+
+                highestDegree--;
+          }
+      }
+
+      if(minDegree == 0){
+          ArrayList<Vertex> disconnected = verticesByDegree.get(minDegree);
+
+          for(Vertex v : disconnected){
+              v.setColor(color);
+              coloredVertices.add(v);
+          }
+      }
+
+      return coloredVertices;
     }
 
     @Override
