@@ -47,10 +47,8 @@ public class Main {
                         rooms = fetchRooms(roomFile);
 
                         if(!errorFlag){
-                            System.out.println("------ Time Slots ------");
 
                             new Graph(courses, rooms, slots);
-
                         }
                     }else{
                         System.out.println(errorMessage);

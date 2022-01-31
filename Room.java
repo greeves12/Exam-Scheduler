@@ -1,6 +1,6 @@
 public class Room {
     private final String name;
-    private final int capacity;
+    private int capacity;
 
     public Room(String name, int capacity){
         this.name = name;
@@ -13,6 +13,10 @@ public class Room {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public void setCapacity(int capacity){
+        this.capacity = capacity;
     }
 
 }
