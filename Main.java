@@ -121,7 +121,7 @@ public class Main {
                             break;
                         }
                         courses.add(new Course(courseName, students));
-                        System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
+                      //  System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
                     } else {
                         errorFlag = true;
                         errorMessage = "ERROR: Non Letter Course";
@@ -180,7 +180,7 @@ public class Main {
                         }
                     }
 
-                    System.out.println("PASS: Loaded room " + roomLine[0] + " with capacity " + roomLine[1]);
+                   // System.out.println("PASS: Loaded room " + roomLine[0] + " with capacity " + roomLine[1]);
                     rooms.add(new Room(roomLine[0],Integer.parseInt(roomLine[1])));
                 }
 
