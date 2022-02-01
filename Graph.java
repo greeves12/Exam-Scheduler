@@ -96,46 +96,42 @@ public class Graph implements GraphInterface{
             ArrayList<Vertex> vert = colorVertices();
             ArrayList<TimeSlot> timeSlots = new ArrayList<>();
 
-            while ((highestDegree(vert)) < getMaxColors() && timeSlots.isEmpty()) {
+            while (vert != null && (highestDegree(vert)) < getMaxColors() && timeSlots.isEmpty()) {
                 timeSlots = generateRooms(vert);
 
                 if(timeSlots.isEmpty()){
-                   // vert = generateNewColors(vert);
-                    System.out.println("ERRORS: Impossible to generate time table with the given courses");
-                    break;
+                    vert = generateNewColors(vert);
+                    if(vert != null) {
+                        for (Vertex v : vert) {
+                            //System.out.println(v.getCourseName() + " " + v.getColor());
+
+                        }
+                    }
                 }
             }
 
-            for(TimeSlot timeSlot : timeSlots){
-                System.out.println("Time Slot #" + timeSlot.getSlot());
-                System.out.println();
+            if(!timeSlots.isEmpty()) {
+                for (TimeSlot timeSlot : timeSlots) {
+                    System.out.println("Time Slot #" + timeSlot.getSlot());
+                    System.out.println();
 
-                for(Map.Entry<Vertex, Room> entry : timeSlot.getCourse().entrySet()){
-                    System.out.println("   " + entry.getKey().getCourseName() + "        " + entry.getValue().getName());
+                    for (Map.Entry<Vertex, Room> entry : timeSlot.getCourse().entrySet()) {
+                        System.out.println("   " + entry.getKey().getCourseName() + "        " + entry.getValue().getName());
+                    }
+
+                    System.out.println();
                 }
-
-                System.out.println();
+            }else{
+                System.out.println("ERRORS: Impossible to generate time table with the given courses");
             }
         }else{
             System.out.println("ERROR: Cannot generate schedule, not enough time slots.");
         }
-
-/*
-        if(colors > getMaxColors()){
-            System.out.println("ERROR: Time conflict results with " + getMaxColors() + " time slots.");
-        }else if(colors < getMaxColors()){
-            ArrayList<Vertex> newColors = generateNewColors(vert);
-
-            for(Vertex v : newColors){
-                System.out.println("Course: " + v.getCourseName() + " Color: " + v.getColor());
-            }
-        }*/
     }
 
     private ArrayList<TimeSlot> generateRooms(ArrayList<Vertex> courses){
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
-        ArrayList<Room> roomsAvailable = new ArrayList<>(rooms);
-        ArrayList<Room> tempRooms = new ArrayList<>(rooms);
+        ArrayList<Room> roomsAvailable = new ArrayList<>(getRooms());
         HashMap<Integer, ArrayList<Vertex>> course = new HashMap<>();
         int slot = 1;
 
@@ -157,6 +153,7 @@ public class Graph implements GraphInterface{
             while (!colorCourses.isEmpty()){
                 if(roomsAvailable.isEmpty()){
                     flag = false;
+                    System.out.println("f");
                     break;
                 }
 
@@ -174,12 +171,16 @@ public class Graph implements GraphInterface{
                 timeSlot.setCourse(map);
                 colorCourses.remove(biggestCourse);
 
-                if(biggestRoom.getCapacity() == 0){
+                if(biggestRoom.getCapacity() <= 0){
                     roomsAvailable.remove(biggestRoom);
                 }
             }
 
             timeSlots.add(timeSlot);
+
+            for(Room room : getRooms()){
+                room.resetCapacity();
+            }
 
             if(!flag){
                 timeSlots.clear();
@@ -187,7 +188,7 @@ public class Graph implements GraphInterface{
             }
 
             roomsAvailable.clear();
-            roomsAvailable.addAll(tempRooms);
+            roomsAvailable.addAll(getRooms());
 
             slot++;
         }
@@ -198,6 +199,10 @@ public class Graph implements GraphInterface{
     private Room findLargetRoom(ArrayList<Room> rooms){
         int size = 0;
         Room v = null;
+
+        if(rooms.size() > 0){
+            v = rooms.get(0);
+        }
 
         for(Room vertex : rooms){
             if(vertex.getCapacity() > size){
@@ -234,7 +239,7 @@ public class Graph implements GraphInterface{
     }
 
     private ArrayList<Vertex> generateNewColors(ArrayList<Vertex> vertices){
-        ArrayList<Vertex> newColors = new ArrayList<>();
+        ArrayList<Vertex> newColors = null;
         HashMap<Integer, ArrayList<Vertex>> duplicates = new HashMap<>();
         HashMap<Integer, ArrayList<Vertex>> temp = new HashMap<>();
         int degree;
@@ -255,6 +260,7 @@ public class Graph implements GraphInterface{
 
         degree = highestDegree(duplicates) + 1;
         colors = degree;
+
 
         colors = (getMaxColors()) - colors;
 
@@ -283,7 +289,9 @@ public class Graph implements GraphInterface{
         if(colors > 0){
             System.out.println("Impossible to make time table");
         }else{
+            newColors = new ArrayList<>();
             for(Map.Entry<Integer, ArrayList<Vertex>> entry : duplicates.entrySet()){
+
                 newColors.addAll(entry.getValue());
             }
         }
@@ -293,6 +301,16 @@ public class Graph implements GraphInterface{
 
     public int getMaxColors() {
         return maxColors;
+    }
+
+    private int uniqueColors(HashMap<Integer, ArrayList<Vertex>> v) {
+        int colors = 0;
+
+        for(Map.Entry<Integer, ArrayList<Vertex>> entry : v.entrySet()){
+            colors++;
+        }
+
+        return colors;
     }
 
     private int highestDegree(HashMap<Integer, ArrayList<Vertex>> v){
