@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.*;
 
 /*
@@ -82,7 +83,7 @@ public class Graph implements GraphInterface{
                             if(!list.contains(vertex1)) {
                                 list.add(vertex1);
                                 graph.put(vertex, list);
-                                //System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
+                                System.out.println("CONSTRAINT: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
                             }
 
                             break;
@@ -106,22 +107,79 @@ public class Graph implements GraphInterface{
             }
 
             if(!timeSlots.isEmpty()) {
-                for (TimeSlot timeSlot : timeSlots) {
-                    System.out.println("Time Slot #" + timeSlot.getSlot());
-                    System.out.println();
 
-                    for (Map.Entry<Vertex, Room> entry : timeSlot.getCourse().entrySet()) {
-                        System.out.println("   " + entry.getKey().getCourseName() + "        " + entry.getValue().getName());
-                    }
+                selectionSort(timeSlots);
 
-                    System.out.println();
-                }
             }else{
-                System.out.println("ERRORS: Impossible to generate time table with the given courses");
+                System.out.println("ERROR: Impossible to generate time table with maximum " + getMaxColors() + " timeslots");
             }
         }else{
             System.out.println("ERROR: Cannot generate schedule, not enough time slots.");
         }
+    }
+
+    private void selectionSort(ArrayList<TimeSlot> timeSlot){
+       int slot = 1;
+
+       for(TimeSlot t : timeSlot){
+            Vertex[] course = new Vertex[t.getCourse().size()];
+            int index = 0;
+
+            for(Map.Entry<Vertex, Room> entry : t.getCourse().entrySet()){
+                course[index] = entry.getKey();
+                index++;
+            }
+
+
+           sort(course);
+
+           System.out.println("Time Slot #" + slot);
+           System.out.println();
+           for (Vertex vertex : course) {
+               System.out.println("   " + vertex.getCourseName() + "        " + t.getCourse().get(vertex).getName());
+           }
+           System.out.println();
+           slot++;
+
+       }
+    }
+
+    private void sort(Vertex[] arr){
+        int length = arr.length;
+
+        for(int x = 0; x < length -1; x++){
+            int min = x;
+
+            for(int i = x+1; i < length; i++){
+                if(isSmaller(arr[i].getCourseName(), arr[min].getCourseName()))
+                    min = i;
+            }
+
+            Vertex temp = arr[min];
+            arr[min] = arr[x];
+            arr[x] = temp;
+        }
+    }
+
+    //Return of true means one is smaller, false means two is smaller
+    private boolean isSmaller(String one, String two){
+        boolean value = false;
+        int index = 0;
+
+        one = one.toUpperCase();
+        two = two.toUpperCase();
+
+        while (index < one.length() && index < two.length()){
+            if (Character.getNumericValue(one.charAt(index)) < Character.getNumericValue(two.charAt(index))) {
+                value = true;
+                break;
+            }else if(Character.getNumericValue(one.charAt(index)) > Character.getNumericValue(two.charAt(index))){
+                break;
+            }
+            index++;
+        }
+
+        return value;
     }
 
     private int uniqueColors(ArrayList<Vertex> vert){
@@ -231,7 +289,7 @@ public class Graph implements GraphInterface{
 
     private Vertex findLargestCourse(ArrayList<Vertex> vertice){
         int size = 0;
-        Vertex v = null;
+        Vertex v = vertice.get(0);
 
         for(Vertex vertex : vertice){
             if(vertex.getCapacity() > size){
@@ -242,16 +300,6 @@ public class Graph implements GraphInterface{
         return v;
     }
 
-    private int highestDegree(ArrayList<Vertex> vertices){
-        int degree = 0;
-
-        for(Vertex v : vertices){
-            if(v.getColor() > degree){
-                degree = v.getColor();
-            }
-        }
-        return degree;
-    }
 
     private ArrayList<Vertex> generateNewColors(ArrayList<Vertex> vertices, int getMaxColors){
         ArrayList<Vertex> newColors = null;

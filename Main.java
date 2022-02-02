@@ -121,7 +121,7 @@ public class Main {
                             break;
                         }
                         courses.add(new Course(courseName, students));
-                      //  System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
+                        System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
                     } else {
                         errorFlag = true;
                         errorMessage = "ERROR: Non Letter Course";
