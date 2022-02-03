@@ -47,7 +47,7 @@ public class Main {
                         rooms = fetchRooms(roomFile);
 
                         if(!errorFlag){
-                            new Graph(courses, rooms);
+                            new Algorithm(new Graph(courses, rooms), slots);
 
                             System.out.println("------ Time Slots ------");
                         }

@@ -18,7 +18,7 @@ import java.util.Map;
 * connects vertices if need be.
 * */
 
-public class Graph implements GraphInterface{
+public class Graph{
     private final ArrayList<Course> courses;
     private final ArrayList<Room> rooms;
     private Map<Vertex, List<Vertex>> graph = new HashMap<>();
@@ -47,21 +47,22 @@ public class Graph implements GraphInterface{
     private void createGraph(){
         ArrayList<Course> courses = getCourses();
 
+        //Add all courses to hashmap (graph) pointing to an arraylist of vertices, and add to list of vertices
         for(Course c : courses){
-            Vertex v = new Vertex(c.getName());
+            Vertex v = new Vertex(c.getName(), c);
             vertices.add(v);
 
             graph.put(v, new ArrayList<>());
         }
 
-        for(Course c : courses){
-            Vertex vertex = getVertex(c.getName());
+        for(Course c : courses){    //For each course
+            Vertex vertex = getVertex(c.getName()); //Get the vertex representing that course
 
-            for(Course deepCourse : courses){
-                if(!c.getName().equals(deepCourse.getName())){
-                    for(int x = 0; x < c.getStudents().size(); x++){
-                        if(deepCourse.getStudents().contains(c.getStudents().get(x))){
-                            Vertex vertex1 = getVertex(deepCourse.getName());
+            for(Course deepCourse : courses){   //Loop through all courses
+                if(!c.getName().equals(deepCourse.getName())){ //Make sure not the same course
+                    for(int x = 0; x < c.getStudents().size(); x++){ //Loop through students in c
+                        if(deepCourse.getStudents().contains(c.getStudents().get(x))){ //If deepCourse and c have the same student
+                            Vertex vertex1 = getVertex(deepCourse.getName());   //Get the vertex
 
                             List<Vertex> list = graph.get(vertex);
 
@@ -80,11 +81,9 @@ public class Graph implements GraphInterface{
         }
     }
 
-    @Override
-    public Course getStartNode() {
-        return null;
+    public Vertex getStartNode() {
+        return vertices.get(0);
     }
-
 
     public ArrayList<Course> getCourses() {
         return courses;
@@ -92,5 +91,9 @@ public class Graph implements GraphInterface{
 
     public ArrayList<Room> getRooms() {
         return rooms;
+    }
+
+    public boolean removeCourse(Course course) {
+        return this.courses.remove(course);
     }
 }

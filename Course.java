@@ -27,4 +27,18 @@ public class Course {
     public ArrayList<Integer> getStudents(){
         return students;
     }
+
+    public boolean conflict(Course otherCourse) {
+        for(int i = 0; i < this.students.size(); i++)
+            for(int x = 0; x < otherCourse.getStudents().size(); x++)
+                if(this.students.get(i) == otherCourse.getStudents().get(x))
+                    return true;
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
 }

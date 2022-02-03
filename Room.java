@@ -15,4 +15,8 @@ public class Room {
         return capacity;
     }
 
+    public boolean hasCapacity(Course course) {
+        return this.capacity >= course.getStudents().size();
+    }
+
 }

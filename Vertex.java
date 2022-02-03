@@ -1,9 +1,12 @@
 public class Vertex {
     private String courseName;
     private int color;
+    private Course course;
 
-    public Vertex(String courseName){
+
+    public Vertex(String courseName, Course course){
         this.courseName = courseName;
+        this.course = course;
     }
 
     public int getColor() {
@@ -17,4 +20,6 @@ public class Vertex {
     public String getCourseName() {
         return courseName;
     }
+
+    public Course getCourse() {return this.course;}
 }
