@@ -31,7 +31,7 @@ public class Course {
     public boolean conflict(Course otherCourse) {
         for(int i = 0; i < this.students.size(); i++)
             for(int x = 0; x < otherCourse.getStudents().size(); x++)
-                if(this.students.get(i) == otherCourse.getStudents().get(x))
+                if(this.students.get(i).equals(otherCourse.getStudents().get(x)))
                     return true;
         return false;
     }

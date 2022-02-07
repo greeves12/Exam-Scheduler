@@ -29,6 +29,7 @@ public class Graph{
         this.courses = courses;
         this.rooms = rooms;
 
+        this.sortRooms();
         createGraph();
     }
 
@@ -67,13 +68,20 @@ public class Graph{
                             List<Vertex> list = graph.get(vertex);
 
                             if(!list.contains(vertex1)) {
+
+                                if(!vertex.hasEdge(vertex1))
+                                    vertex.addEdge(vertex1);
+                                if(!(vertex.getEdge(vertex1) == null)){
+                                    vertex.getEdge(vertex1).addStudent(c.getStudents().get(x));
+                                }
+
                                 list.add(vertex1);
                                 graph.put(vertex, list);
                             }
 
                             System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
 
-                            break;
+                            //break;
                         }
                     }
                 }
@@ -95,5 +103,27 @@ public class Graph{
 
     public boolean removeCourse(Course course) {
         return this.courses.remove(course);
+    }
+
+    private void sortRooms() {
+        boolean sorted = false;
+        while(!sorted) {
+            sorted = true;
+            for(int i = 0; i < this.rooms.size()-1; i++)
+                if(this.rooms.get(i).getCapacity() > this.rooms.get(i+1).getCapacity()) {
+                    Room temporaryRoom = this.rooms.get(i);
+                    this.rooms.set(i, this.rooms.get(i+1));
+                    this.rooms.set(i+1, temporaryRoom);
+                    sorted = false;
+                }
+        }
+    }
+
+    public Vertex getVertex(int index) {
+        return this.vertices.get(index);
+    }
+
+    public int getNumVertices() {
+        return this.vertices.size();
     }
 }

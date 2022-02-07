@@ -19,4 +19,9 @@ public class Room {
         return this.capacity >= course.getStudents().size();
     }
 
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
 }
