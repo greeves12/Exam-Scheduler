@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Algorithm {
 
-    public Course[][] solution;
+    public ArrayList<Course>[][] solution;
 
     public Algorithm(Graph inputGraph, int times) {
 
@@ -19,22 +19,29 @@ public class Algorithm {
         this.printSolution(solution, inputGraph.getRooms());
     }
 
-    private Course[][] getSolution(Graph graph, int times) {
+    private ArrayList<Course>[][] getSolution(Graph graph, int times) {
 
-        Course[][] schedule = new Course[times][graph.getRooms().size()];
+        ArrayList<Course>[][] schedule = new ArrayList[times][graph.getRooms().size()];
         Vertex startingVertex = graph.getStartNode();
-        ArrayList<Room> rooms = graph.getRooms();
+        ArrayList<Room>[] rooms = new ArrayList[times];
+
+        for(int i = 0; i < rooms.length; i++) {
+            rooms[i] = new ArrayList<>();
+            for (int j = 0; j < graph.getRooms().size(); j++)
+                rooms[i].add(graph.getRooms().get(j).getCopy());
+        }
 
         for(int i = 0; i < schedule.length; i++)
             for(int x = 0; x < schedule[i].length; x++)
-                schedule[i][x] = null;
+                schedule[i][x] = new ArrayList<>();
 
         if(graph.getRooms().get(graph.getRooms().size()-1).getCapacity() < startingVertex.getCourse().getStudents().size()) {
             return null;
         } else {
-            for(int room = 0; room < rooms.size(); room++) {
-                if (startingVertex.getCourse().getStudents().size() <= rooms.get(room).getCapacity()) {
-                    schedule[0][room] = startingVertex.getCourse();
+            for(int room = 0; room < rooms[0].size(); room++) {
+                if (startingVertex.getCourse().getStudents().size() <= rooms[0].get(room).getCapacity()) {
+                    rooms[0].get(room).subtractCapacity(startingVertex.getCourse().getStudents().size());
+                    schedule[0][room].add(startingVertex.getCourse());
                     break;
                 }
             }
@@ -57,15 +64,17 @@ public class Algorithm {
 
     }
 
-    private Course[][] addCourses(ArrayList<Vertex> verticesLeft, Course[][] currentSchedule, Vertex nextVertex, ArrayList<Room> rooms) {
+    private ArrayList<Course>[][] addCourses(ArrayList<Vertex> verticesLeft, ArrayList<Course>[][] currentSchedule, Vertex nextVertex, ArrayList<Room>[] rooms) {
 
         boolean scheduled = false;
         for(int time = 0; time < currentSchedule.length; time++) {
             if (!this.conflicts(currentSchedule[time], nextVertex.getCourse()))
                 for(int room = 0; room < currentSchedule[time].length; room++) {
-                    if(currentSchedule[time][room] == null && rooms.get(room).getCapacity() >= nextVertex.getCourse().getStudents().size()) {
-                        currentSchedule[time][room] = nextVertex.getCourse();
-                        System.out.println("Adding Course to Schedule: Course " + nextVertex.getCourseName() + ", Time Slot " + time + ", Room " + rooms.get(room));
+                    if(/*currentSchedule[time][room] == null && */rooms[time].get(room).getCapacity() >= nextVertex.getCourse().getStudents().size()) {
+                        currentSchedule[time][room].add(nextVertex.getCourse());
+                        rooms[time].get(room).subtractCapacity(nextVertex.getCourse().getStudents().size());
+                       //this.sortRooms(rooms[time]);
+                        System.out.println("Adding Course to Schedule: Course " + nextVertex.getCourseName() + ", Time Slot " + time + ", Room " + rooms[time].get(room));
                         scheduled = true;
                         break;
                     }
@@ -136,14 +145,17 @@ public class Algorithm {
             return schedule;
     }
 */
-    public void printSolution(Course[][] schedule, ArrayList<Room> rooms) {
+    public void printSolution(ArrayList<Course>[][] schedule, ArrayList<Room> rooms) {
 
         if(!(schedule == null)) {
             System.out.println("\n\n");
             for (int i = 0; i < schedule.length; i++) {
                 System.out.println("Time Slot " + (i + 1));
                 for (int j = 0; j < schedule[i].length; j++) {
-                    System.out.println("\t" + rooms.get(j).getName() + " (Capacity " + rooms.get(j).getCapacity() + "): " + schedule[i][j]);
+                    System.out.print("\t" + rooms.get(j).getName() + " (Capacity " + rooms.get(j).getCapacity() + "): ");
+                    for(int k = 0; k < schedule[i][j].size(); k++)
+                        System.out.print("\t" + schedule[i][j].get(k));
+                    System.out.print("\n");
                 }
             }
         } else {
@@ -151,9 +163,10 @@ public class Algorithm {
         }
     }
 
-    private boolean conflicts(Course[] schedule, Course course) {
-        for(int i = 0; i < schedule.length; i++) {
-            if(!(schedule[i] == null) && schedule[i].conflict(course))
+    private boolean conflicts(ArrayList<Course>[] schedule, Course course) {
+        for(int i = 0; i < schedule.length; i++)
+            for(int j = 0; j < schedule[i].size(); j++){
+            if(!(schedule[i] == null) && schedule[i].get(j).conflict(course))
                 return true;
         }
         return false;

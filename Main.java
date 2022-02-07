@@ -7,10 +7,17 @@ import java.util.Scanner;
 * Known Bugs: Courses2 doesn't load course properly.
 * */
 
+/**
+ *
+ */
 public class Main {
     private static boolean errorFlag = false;
     private static String errorMessage = "";
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         boolean running = true;
         Scanner scanner = new Scanner(System.in);
@@ -67,6 +74,11 @@ public class Main {
         }
     }
 
+    /**
+     *
+     * @param courseFile
+     * @return
+     */
     private static ArrayList<Course> fetchCourses(File courseFile){
         ArrayList<Course> courses = new ArrayList<>();
 
