@@ -18,7 +18,7 @@ import java.util.Map;
 * connects vertices if need be.
 * */
 
-public class Graph implements GraphInterface{
+public class Graph{
     private final ArrayList<Course> courses;
     private final ArrayList<Room> rooms;
     private Map<Vertex, List<Vertex>> graph = new HashMap<>();
@@ -29,6 +29,7 @@ public class Graph implements GraphInterface{
         this.courses = courses;
         this.rooms = rooms;
 
+        this.sortRooms();
         createGraph();
     }
 
@@ -47,32 +48,40 @@ public class Graph implements GraphInterface{
     private void createGraph(){
         ArrayList<Course> courses = getCourses();
 
+        //Add all courses to hashmap (graph) pointing to an arraylist of vertices, and add to list of vertices
         for(Course c : courses){
-            Vertex v = new Vertex(c.getName());
+            Vertex v = new Vertex(c.getName(), c);
             vertices.add(v);
 
             graph.put(v, new ArrayList<>());
         }
 
-        for(Course c : courses){
-            Vertex vertex = getVertex(c.getName());
+        for(Course c : courses){    //For each course
+            Vertex vertex = getVertex(c.getName()); //Get the vertex representing that course
 
-            for(Course deepCourse : courses){
-                if(!c.getName().equals(deepCourse.getName())){
-                    for(int x = 0; x < c.getStudents().size(); x++){
-                        if(deepCourse.getStudents().contains(c.getStudents().get(x))){
-                            Vertex vertex1 = getVertex(deepCourse.getName());
+            for(Course deepCourse : courses){   //Loop through all courses
+                if(!c.getName().equals(deepCourse.getName())){ //Make sure not the same course
+                    for(int x = 0; x < c.getStudents().size(); x++){ //Loop through students in c
+                        if(deepCourse.getStudents().contains(c.getStudents().get(x))){ //If deepCourse and c have the same student
+                            Vertex vertex1 = getVertex(deepCourse.getName());   //Get the vertex
 
                             List<Vertex> list = graph.get(vertex);
 
                             if(!list.contains(vertex1)) {
+
+                                if(!vertex.hasEdge(vertex1))
+                                    vertex.addEdge(vertex1);
+                                if(!(vertex.getEdge(vertex1) == null)){
+                                    vertex.getEdge(vertex1).addStudent(c.getStudents().get(x));
+                                }
+
                                 list.add(vertex1);
                                 graph.put(vertex, list);
                             }
 
                             System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
 
-                            break;
+                            //break;
                         }
                     }
                 }
@@ -80,11 +89,9 @@ public class Graph implements GraphInterface{
         }
     }
 
-    @Override
-    public Course getStartNode() {
-        return null;
+    public Vertex getStartNode() {
+        return vertices.get(0);
     }
-
 
     public ArrayList<Course> getCourses() {
         return courses;
@@ -92,5 +99,31 @@ public class Graph implements GraphInterface{
 
     public ArrayList<Room> getRooms() {
         return rooms;
+    }
+
+    public boolean removeCourse(Course course) {
+        return this.courses.remove(course);
+    }
+
+    private void sortRooms() {
+        boolean sorted = false;
+        while(!sorted) {
+            sorted = true;
+            for(int i = 0; i < this.rooms.size()-1; i++)
+                if(this.rooms.get(i).getCapacity() > this.rooms.get(i+1).getCapacity()) {
+                    Room temporaryRoom = this.rooms.get(i);
+                    this.rooms.set(i, this.rooms.get(i+1));
+                    this.rooms.set(i+1, temporaryRoom);
+                    sorted = false;
+                }
+        }
+    }
+
+    public Vertex getVertex(int index) {
+        return this.vertices.get(index);
+    }
+
+    public int getNumVertices() {
+        return this.vertices.size();
     }
 }
