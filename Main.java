@@ -3,10 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/*
-* Known Bugs: Courses2 doesn't load course properly.
-* */
-
 /**
  *
  */
@@ -105,6 +101,7 @@ public class Main {
                             break;
 
                         data = sc.next();
+
                         while (Character.isDigit(data.charAt(0))) {
                             if(!allNumbers(data)){
                                 errorFlag = true;
@@ -140,6 +137,11 @@ public class Main {
                         errorMessage = "ERROR: Non Letter Course";
                         break;
                     }
+                }
+
+                if(Character.isLetter(data.charAt(0))){
+                    courses.add(new Course(data, new ArrayList<>()));
+                    System.out.println("PASS: Loaded Course " + data + " with size " + 0);
                 }
 
             }else{
