@@ -15,17 +15,16 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
-        boolean running = true;
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Exam Scheduler");
 
-        while (running){
+        while (true){
             System.out.print("$ sched ");
             String line = scanner.nextLine();
 
             if(line.equalsIgnoreCase("exit")){
-                running = false;
+                break;
             }
 
             runDataFetch(line.split(" "));
@@ -38,8 +37,8 @@ public class Main {
         ArrayList<Room> rooms;
         ArrayList<Course> courses;
 
-        File courseFile = new File("test data/" + arg[0]);
-        File roomFile = new File("test data/" + arg[1]);
+        File courseFile = new File("test_data/" + arg[0]);
+        File roomFile = new File("test_data/" + arg[1]);
         int slots = Integer.parseInt(arg[2]);
         if(courseFile.exists()){
             if(roomFile.exists()){
