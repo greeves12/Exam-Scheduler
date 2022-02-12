@@ -1,3 +1,10 @@
+/*
+* File: Room.java
+* Purpose: To create an object of a room that holds the room name and the capacity.
+*
+* Important variables: name - the name of the room
+*                      capacity - the capacity of the room
+* */
 public class Room {
     private final String name;
     private int capacity;
@@ -13,10 +20,6 @@ public class Room {
 
     public int getCapacity() {
         return capacity;
-    }
-
-    public boolean hasCapacity(Course course) {
-        return this.capacity >= course.getStudents().size();
     }
 
     @Override

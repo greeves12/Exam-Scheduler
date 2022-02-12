@@ -1,5 +1,13 @@
 import java.util.ArrayList;
 
+/*
+* File: Course.java
+* Purpose: To create an object of a course that holds the course name and the array of students.
+*
+* Important variables: name - course name
+*                      students - an arraylist of all students in a course
+* */
+
 public class Course {
     private String name;
     private ArrayList<Integer> students;
@@ -11,17 +19,6 @@ public class Course {
 
     public String getName(){
         return name;
-    }
-
-    public boolean addStudent(int studentID){
-        if(studentID < 0){
-            return false;
-        }
-
-        if(!students.contains(studentID))
-            students.add(studentID);
-
-        return true;
     }
 
     public ArrayList<Integer> getStudents(){

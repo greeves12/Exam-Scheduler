@@ -4,15 +4,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
+ * Group: Drew and Tate
+ * Date: February 11, 2021
+ * Source: Main.java
  *
+ * Project Goal: To generate a time conflict free schedule (with room assignment) from a variety of courses, rooms and students.
  */
 public class Main {
     private static boolean errorFlag = false;
     private static String errorMessage = "";
 
-    /**
+    /*
+     * Function: main
+     * Purpose: the main function of the program. It is an infinite loop until the user types stop into
+     *          console. This means that the program can handle an infinite amount of schedules.
      *
-     * @param args
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -33,6 +39,15 @@ public class Main {
         scanner.close();
     }
 
+    /*
+    * Function: runDataFetch
+    * Purpose: A helper function to read input files (course and rooms) and
+    *          interpret the data correctly.
+    *
+    * Inputs: arg - takes in an array of strings called arguments. Arg[0] = course file
+    *                                                              Arg[1] = rooms file
+    *                                                              Arg[2] = amount of time slots
+    * */
     private static void runDataFetch(String[] arg){
         ArrayList<Room> rooms;
         ArrayList<Course> courses;
@@ -69,10 +84,13 @@ public class Main {
         }
     }
 
-    /**
+    /*
+     * Function: fetchCourses
+     * Purpose: to fetch the information from the courses file and handle the data.
+     *          This function will read until end of file and will read course name, and all the students
+     *          and then assign it a course object that will be appended into the arraylist.
      *
-     * @param courseFile
-     * @return
+     * Inputs: courseFile - the course file to read from
      */
     private static ArrayList<Course> fetchCourses(File courseFile){
         ArrayList<Course> courses = new ArrayList<>();
@@ -156,6 +174,14 @@ public class Main {
         return courses;
     }
 
+    /*
+    * Function: fetchRooms
+    * Purpose: to fetch the information from the rooms file and handle the data.
+     *          This function will read until end of file and will read room name, and the room capacity
+     *          and then assign it a room object that will be appended into the arraylist.
+     *
+     * Inputs: roomFile - the room file to read from
+    * */
     private static ArrayList<Room> fetchRooms(File roomFile){
         ArrayList<Room> rooms = new ArrayList<>();
 
@@ -207,6 +233,14 @@ public class Main {
         return rooms;
     }
 
+    /*
+    * Function: allNumbers
+    * Purpose: a helper function to determine if a string is all digits
+    *
+    * Inputs: s - the string to test
+    *
+    * Returns either true or false.
+    * */
     private static boolean allNumbers(String s){
         for(int x = 0; x < s.length(); x++){
             if(!Character.isDigit(s.charAt(x))){
