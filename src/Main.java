@@ -64,7 +64,7 @@ public class Main {
                         rooms = fetchRooms(roomFile);
 
                         if(!errorFlag){
-                            new Algorithm(new Graph(courses, rooms), slots);
+                            new Schedule(new Graph(courses, rooms), slots);
 
                             System.out.println("------ Time Slots ------");
                         }
@@ -194,7 +194,7 @@ public class Main {
                 errorMessage = "ERROR: Rooms file is empty.";
             }else {
                 while (sc.hasNextLine()) {
-                    String[] roomLine = sc.nextLine().split("\s+|\t+");
+                    String[] roomLine = sc.nextLine().split("\\s+|\\t+");
 
                     if(roomLine.length == 1){
                         errorFlag = true;

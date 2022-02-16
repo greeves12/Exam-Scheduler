@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 
-/*
-*
-* */
+/**
+* Represents a vertex in a graph. Essentially acts as a wrapper for a "Course" object. Each Vertex represents 1 course.
+*/
 
 public class Vertex {
     private String courseName;
     private int color;
     private Course course;
-    private ArrayList<Edge> edges = new ArrayList<>();
+    private ArrayList<Edge> edges = new ArrayList<>(); //List of edges connecting to other vertices in a "Graph" object
 
 
     public Vertex(String courseName, Course course){

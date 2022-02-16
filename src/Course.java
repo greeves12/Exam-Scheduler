@@ -25,6 +25,11 @@ public class Course {
         return students;
     }
 
+    /**
+     * Determines whether there is any student in this course and "otherCourse", creating an exam conflict
+     * @param otherCourse The other course
+     * @return true if there is a conflict, false if there is no conflict
+     */
     public boolean conflict(Course otherCourse) {
         for(int i = 0; i < this.students.size(); i++)
             for(int x = 0; x < otherCourse.getStudents().size(); x++)

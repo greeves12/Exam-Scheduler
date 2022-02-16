@@ -8,6 +8,7 @@
 public class Room {
     private final String name;
     private int capacity;
+    private int index = -1;
 
     public Room(String name, int capacity){
         this.name = name;
@@ -35,4 +36,11 @@ public class Room {
         this.capacity -= amount;
     }
 
+    public int getIndex() {
+        return this.index;
+    }
+
+    public void setIndex(int i) {
+        this.index = i;
+    }
 }
