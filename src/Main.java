@@ -120,21 +120,7 @@ public class Main {
                         data = sc.next();
 
                         while (Character.isDigit(data.charAt(0))) {
-                            if(!allNumbers(data)){
-                                errorFlag = true;
-                                errorMessage = "ERROR: StudentID contains non-digit";
-                                break;
-                            }
-
-                            if (Integer.parseInt(data) < 0) {
-                                errorFlag = true;
-                                errorMessage = "ERROR: Negative studentID in " + courseName;
-                                break;
-                            }
-
-                            if(students.contains(Integer.valueOf(data))){
-                                errorFlag = true;
-                                errorMessage = "ERROR: Duplicate students in a class found.";
+                            if(hasErrors(students, courseName, data)){
                                 break;
                             }
 
@@ -172,6 +158,31 @@ public class Main {
         }
 
         return courses;
+    }
+
+    /*
+    * Function: hasErrors
+    * Purpose: to verify that the data has no errors, such as a negative student number or duplicate courses.
+    * */
+    private static boolean hasErrors(ArrayList<Integer> students, String courseName, String data){
+        if(!allNumbers(data)){
+            errorFlag = true;
+            errorMessage = "ERROR: StudentID contains non-digit";
+            return true;
+        }
+
+        if (Integer.parseInt(data) < 0) {
+            errorFlag = true;
+            errorMessage = "ERROR: Negative studentID in " + courseName;
+            return true;
+        }
+
+        if(students.contains(Integer.valueOf(data))){
+            errorFlag = true;
+            errorMessage = "ERROR: Duplicate students in a class found.";
+            return true;
+        }
+        return false;
     }
 
     /*
