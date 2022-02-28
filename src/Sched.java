@@ -106,8 +106,8 @@ public class Sched {
 
                     if (Character.isLetter(data.charAt(0))) {
                         courseName = data;
-                        for (int x = 0; x < courses.size(); x++) {
-                            if (courses.get(x).getName().equals(data)) {
+                        for (Course cours : courses) {
+                            if (cours.getName().equals(data)) {
                                 errorFlag = true;
                                 errorMessage = "ERROR: Duplicate course name found.";
                                 break;
@@ -195,7 +195,7 @@ public class Sched {
     private static ArrayList<Room> fetchRooms(File roomFile){
         ArrayList<Room> rooms = new ArrayList<>();
 
-        Scanner sc = null;
+        Scanner sc;
         try {
             sc = new Scanner(roomFile);
 
@@ -267,7 +267,7 @@ public class Sched {
             return false;
         }
         try {
-            double d = Double.parseDouble(strNum);
+            Double.parseDouble(strNum);
         } catch (NumberFormatException nfe) {
             return false;
         }
