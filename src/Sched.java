@@ -10,7 +10,7 @@ import java.util.Scanner;
  *
  * Project Goal: To generate a time conflict free schedule (with room assignment) from a variety of courses, rooms and students.
  */
-public class Main {
+public class Sched {
     private static boolean errorFlag = false;
     private static String errorMessage = "";
 
@@ -21,23 +21,19 @@ public class Main {
      *
      */
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Exam Scheduler");
-
-        while (true){
-            System.out.print("$ sched ");
-            String line = scanner.nextLine();
-
-            if(line.equalsIgnoreCase("exit")){
-                break;
+        if(args.length < 3){
+            System.out.println("ERROR: Missing arguments.");
+            System.out.println("Should be sched <coursefile> <roomsfile> <timeslot>");
+        }else {
+            if(isNumeric(args[2]) && !args[2].contains(".")) {
+                runDataFetch(args);
+            }else{
+                System.out.println("ERROR: Time slot must be an integer");
             }
-
-            runDataFetch(line.split(" "));
-
         }
-        scanner.close();
     }
+
+
 
     /*
     * Function: runDataFetch
@@ -134,22 +130,22 @@ public class Main {
                             break;
                         }
                         courses.add(new Course(courseName, students));
-                        System.out.println("PASS: Loaded Course " + courseName + " with size " + students.size());
+
                     } else {
                         errorFlag = true;
-                        errorMessage = "ERROR: Non Letter Course";
+                        errorMessage = "ERROR: Course name must start with a letter.";
                         break;
                     }
                 }
 
                 if(Character.isLetter(data.charAt(0))){
                     courses.add(new Course(data, new ArrayList<>()));
-                    System.out.println("PASS: Loaded Course " + data + " with size " + 0);
+
                 }
 
             }else{
                 errorFlag = true;
-                errorMessage = "ERROR: Courses file is empty";
+                errorMessage = "COMPLETE: No schedule can be generated since no courses are present.";
             }
 
             sc.close();
@@ -202,20 +198,20 @@ public class Main {
 
             if(!sc.hasNext()){
                 errorFlag = true;
-                errorMessage = "ERROR: Rooms file is empty.";
+                errorMessage = "COMPLETE: No schedule can be generated as there are no rooms present.";
             }else {
                 while (sc.hasNextLine()) {
                     String[] roomLine = sc.nextLine().split("\\s+|\\t+");
 
                     if(roomLine.length == 1){
                         errorFlag = true;
-                        errorMessage = "ERROR: Invalid room.";
+                        errorMessage = "ERROR: Missing room capacity.";
                         break;
                     }
 
                     if(!allNumbers(roomLine[1])){
                         errorFlag = true;
-                        errorMessage = "ERROR: Room has non digits.";
+                        errorMessage = "ERROR: Room capacity must be an integer.";
                         break;
                     }else if(Integer.parseInt(roomLine[1]) < 0){
                         errorFlag = true;
@@ -231,10 +227,12 @@ public class Main {
                         }
                     }
 
-                    System.out.println("PASS: Loaded room " + roomLine[0] + " with capacity " + roomLine[1]);
-                    rooms.add(new Room(roomLine[0],Integer.parseInt(roomLine[1])));
-                }
+                    rooms.add(new Room(roomLine[0], Integer.parseInt(roomLine[1])));
 
+                }
+            }
+            if(errorFlag){
+                System.out.println(errorMessage);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -257,6 +255,18 @@ public class Main {
             if(!Character.isDigit(s.charAt(x))){
                 return false;
             }
+        }
+        return true;
+    }
+
+    private static boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            double d = Double.parseDouble(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
         }
         return true;
     }
