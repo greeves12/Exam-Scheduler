@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ebabce65-7239-4c14-9f1a-43249262b3bc" name="Changes" comment="" />
+    <list default="true" id="ebabce65-7239-4c14-9f1a-43249262b3bc" name="Changes" comment="Added more comments and modularized I/O.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Schedule.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +28,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -36,7 +41,7 @@
       <recent name="C:\Users\ingel\IdeaProjects\Scheduler3649Feb16\src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Sched">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Scheduler3649Feb16" />
@@ -44,8 +49,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Sched" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Sched" />
+      <module name="Scheduler3649Feb16" />
+      <option name="PROGRAM_PARAMETERS" value="courses7 rooms4 10" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Sched" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -60,9 +74,45 @@
       <updated>1645043101405</updated>
       <workItem from="1645043102540" duration="5154000" />
     </task>
+    <task id="LOCAL-00001" summary="Added more comments and modularized I/O.">
+      <created>1645068921368</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1645068921368</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixed I/O to be executable from command line only. Added more descriptive error messages as well as fixed cases where error messages should be present.">
+      <created>1646007411988</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1646007411988</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added error messages when arguments are less than or greater than three.">
+      <created>1646007612201</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1646007612201</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Cleaned up the warnings from console when compiling.">
+      <created>1646008171821</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1646008171821</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added more comments and modularized I/O." />
+    <MESSAGE value="Fixed I/O to be executable from command line only. Added more descriptive error messages as well as fixed cases where error messages should be present." />
+    <MESSAGE value="Added error messages when arguments are less than or greater than three." />
+    <MESSAGE value="Cleaned up the warnings from console when compiling." />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up the warnings from console when compiling." />
   </component>
 </project>

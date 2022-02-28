@@ -22,18 +22,18 @@ public class Schedule {
     private ArrayList<Course>[][] getSolution(Graph graph, int times) {
 
         ArrayList<Course>[][] schedule = this.generateBlankSchedule(graph, times);
-        ArrayList<Room>[] timeSlotRooms = this.getTimeSlotRooms(graph, times); //Generate 2d array of rooms in each time slot, to keep track of remaining room capacity
+        ArrayList<ArrayList<Room> > timeSlotRooms = this.getTimeSlotRooms(graph, times); //Generate 2d array of rooms in each time slot, to keep track of remaining room capacity
         Vertex startingVertex = graph.getStartNode(); //Get course with highest number of students
 
         //Check if there are too many students in this course to fit in the largest room
         if(graph.getRooms().get(graph.getRooms().size()-1).getCapacity() < startingVertex.getCourse().getStudents().size()) {
             return null;
         } else {
-            for(int room = 0; room < timeSlotRooms[0].size(); room++) {
-                if (startingVertex.getCourse().getStudents().size() <= timeSlotRooms[0].get(room).getCapacity()) {
-                    timeSlotRooms[0].get(room).subtractCapacity(startingVertex.getCourse().getStudents().size());
-                    schedule[0][timeSlotRooms[0].get(room).getIndex()].add(startingVertex.getCourse());
-                    this.sortRooms(timeSlotRooms[0]);
+            for(int room = 0; room < timeSlotRooms.get(0).size(); room++) {
+                if (startingVertex.getCourse().getStudents().size() <= timeSlotRooms.get(0).get(room).getCapacity()) {
+                    timeSlotRooms.get(0).get(room).subtractCapacity(startingVertex.getCourse().getStudents().size());
+                    schedule[0][timeSlotRooms.get(0).get(room).getIndex()].add(startingVertex.getCourse());
+                    this.sortRooms(timeSlotRooms.get(0));
                     break;
                 }
             }
@@ -63,17 +63,17 @@ public class Schedule {
      * @param rooms The 2d array of rooms representing each room in each time slot
      * @return currentSchedule, but with nextVertex added to it
      */
-    private ArrayList<Course>[][] getSolution(ArrayList<Vertex> verticesLeft, ArrayList<Course>[][] currentSchedule, Vertex nextVertex, ArrayList<Room>[] rooms) {
+    private ArrayList<Course>[][] getSolution(ArrayList<Vertex> verticesLeft, ArrayList<Course>[][] currentSchedule, Vertex nextVertex, ArrayList<ArrayList<Room> > rooms) {
 
         boolean scheduled = false; //Boolean to keep track of whether the course represented by "nextVertex" has been scheduled
         for(int time = 0; time < currentSchedule.length; time++) { //Loop through time slots
             if (!this.conflicts(currentSchedule[time], nextVertex.getCourse())) //If there are no student conflicts between "nextVertex" and other remaining scheduled courses
                 for(int room = 0; room < currentSchedule[time].length; room++) { // Loop through rooms to see if one has the capacity for the current course
-                    if(rooms[time].get(room).getCapacity() >= nextVertex.getCourse().getStudents().size()) { // Check to see if current room has the correct capacity
-                        currentSchedule[time][rooms[time].get(room).getIndex()].add(nextVertex.getCourse()); //Add the course to the schedule
-                        rooms[time].get(room).subtractCapacity(nextVertex.getCourse().getStudents().size()); //Subtract the students in the course from the total capacity of the room
-                        this.sortRooms(rooms[time]); //Resort the rooms based on the new capacity
-                        System.out.println("Adding Course to Schedule: Course " + nextVertex.getCourseName() + ", Time Slot " + time + ", Room " + rooms[time].get(room));
+                    if(rooms.get(time).get(room).getCapacity() >= nextVertex.getCourse().getStudents().size()) { // Check to see if current room has the correct capacity
+                        currentSchedule[time][rooms.get(time).get(room).getIndex()].add(nextVertex.getCourse()); //Add the course to the schedule
+                        rooms.get(time).get(room).subtractCapacity(nextVertex.getCourse().getStudents().size()); //Subtract the students in the course from the total capacity of the room
+                        this.sortRooms(rooms.get(time)); //Resort the rooms based on the new capacity
+                        System.out.println("Adding Course to Schedule: Course " + nextVertex.getCourseName() + ", Time Slot " + time + ", Room " + rooms.get(time).get(room));
                         scheduled = true; //The course has been scheduled
                         break; //Stop looping through rooms
                     }
@@ -120,14 +120,17 @@ public class Schedule {
      * @param times The number of time slots available
      * @return A starting 2d rooms array
      */
-    private ArrayList<Room>[] getTimeSlotRooms(Graph graph, int times) {
-        ArrayList<Room>[] timeSlotRooms = new ArrayList[times];
-        for(int i = 0; i < timeSlotRooms.length; i++) {
-            timeSlotRooms[i] = new ArrayList<>();
+    private ArrayList<ArrayList<Room> > getTimeSlotRooms(Graph graph, int times) {
+        ArrayList<ArrayList<Room> > timeSlotRooms =
+                new ArrayList<ArrayList<Room> >(times);
+
+        for(int i = 0; i < times; i++) {
+            ArrayList<Room> r = new ArrayList<>();
             for (int j = 0; j < graph.getRooms().size(); j++) {
-                timeSlotRooms[i].add(graph.getRooms().get(j).getCopy());
-                timeSlotRooms[i].get(j).setIndex(j);
+                r.add(graph.getRooms().get(j).getCopy());
+                r.get(j).setIndex(j);
             }
+            timeSlotRooms.add(r);
         }
         return timeSlotRooms;
     }
