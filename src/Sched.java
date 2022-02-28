@@ -23,8 +23,11 @@ public class Sched {
     public static void main(String[] args) {
         if(args.length < 3){
             System.out.println("ERROR: Missing arguments.");
-            System.out.println("Should be sched <coursefile> <roomsfile> <timeslot>");
-        }else {
+            System.out.println("Arguments should be <coursefile> <roomsfile> <timeslot>");
+        }else if(args.length > 3){
+            System.out.println("ERROR: Too many arguments.");
+            System.out.println("Arguments should be <coursefile> <roomsfile> <timeslot>");
+        } else {
             if(isNumeric(args[2]) && !args[2].contains(".")) {
                 runDataFetch(args);
             }else{
