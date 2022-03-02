@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ebabce65-7239-4c14-9f1a-43249262b3bc" name="Changes" comment="Added more comments and modularized I/O.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Main.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Schedule.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
