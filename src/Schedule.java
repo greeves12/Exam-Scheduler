@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Schedule {
@@ -149,12 +148,14 @@ public class Schedule {
         if(!(schedule == null)) {
             System.out.println("\n\n");
             for (int i = 0; i < schedule.size(); i++) {
-                System.out.println("Time Slot " + (i + 1));
-                for (int j = 0; j < schedule.get(i).size(); j++) {
-                    System.out.print("\t" + rooms.get(j).getName() + " (Capacity " + rooms.get(j).getCapacity() + "): ");
-                    for(int k = 0; k < schedule.get(i).get(j).size(); k++)
-                        System.out.print("\t" + schedule.get(i).get(j).get(k));
-                    System.out.print("\n");
+                if(schedule.get(i).size() > 0) {
+                    System.out.println("Time Slot " + (i + 1));
+                    for (int j = 0; j < schedule.get(i).size(); j++) {
+                        System.out.print("\t" + rooms.get(j).getName() + " (Capacity " + rooms.get(j).getCapacity() + "): ");
+                        for (int k = 0; k < schedule.get(i).get(j).size(); k++)
+                            System.out.print("\t" + schedule.get(i).get(j).get(k));
+                        System.out.print("\n");
+                    }
                 }
             }
         } else {
@@ -195,62 +196,4 @@ public class Schedule {
                 }
         }
     }
-
-    /*private void sortCourses(ArrayList<Course> courses) {
-        boolean sorted = false;
-        while(!sorted) {
-            sorted = true;
-            for(int i = 0; i < courses.size()-1; i++)
-                if(courses.get(i).getStudents().size() < courses.get(i+1).getStudents().size()) {
-                    Course tempCourse = courses.get(i);
-                    courses.set(i, courses.get(i+1));
-                    courses.set(i+1, tempCourse);
-                    sorted = false;
-                }
-        }
-    }
-
-    public Course[][] getSolution(ArrayList<Room> totalRooms, ArrayList<Course> totalCourses, int times) {
-
-            //Generates Schedules with leftover courses arraylist
-            Course[][] schedule = new Course[times][totalRooms.size()];
-
-            ArrayList<Course> courses = new ArrayList<>();
-            for (int i = 0; i < totalCourses.size(); i++) {
-                courses.add(totalCourses.get(i));
-            }
-            this.sortCourses(courses);
-
-            for(int time = 0; time < times; time++) {
-                for (int i = 0; i < schedule[time].length; i++)
-                    schedule[time][i] = null;
-
-                ArrayList<Room> rooms = new ArrayList<>();
-                for (int i = 0; i < totalRooms.size(); i++) {
-                    rooms.add(totalRooms.get(i));
-                }
-                this.sortRooms(rooms);
-
-                for (int i = 0; i < courses.size(); i++) {
-                    for (int x = 0; x < rooms.size(); x++) {
-                        if (rooms.get(x).hasCapacity(courses.get(i)) && !conflicts(schedule[time], courses.get(i))) {
-                            schedule[time][x] = courses.get(i);
-                            courses.remove(i);
-                            rooms.remove(x);
-                            i = i - 1;
-                            break;
-                        }
-                    }
-                    if(courses.size() == 0)
-                        break;
-                }
-                if(courses.size() == 0)
-                    break;
-            }
-
-            if(courses.size() != 0)
-                return null;
-            return schedule;
-    }
-*/
 }

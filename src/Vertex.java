@@ -5,14 +5,12 @@ import java.util.ArrayList;
 */
 
 public class Vertex {
-    private String courseName;
     private int color;
     private Course course;
     private ArrayList<Edge> edges = new ArrayList<>(); //List of edges connecting to other vertices in a "Graph" object
 
 
-    public Vertex(String courseName, Course course){
-        this.courseName = courseName;
+    public Vertex(Course course){
         this.course = course;
     }
 
@@ -25,7 +23,7 @@ public class Vertex {
     }
 
     public String getCourseName() {
-        return courseName;
+        return this.course.getName();
     }
 
     public Course getCourse() {return this.course;}

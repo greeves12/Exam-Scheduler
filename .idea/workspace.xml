@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebabce65-7239-4c14-9f1a-43249262b3bc" name="Changes" comment="Added more comments and modularized I/O.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Sched.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Sched.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Schedule.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Scheduler3649Feb16/Schedule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Sched.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Sched.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Schedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Schedule.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,7 +53,7 @@
     <configuration name="Sched" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Sched" />
       <module name="Scheduler3649Feb16" />
-      <option name="PROGRAM_PARAMETERS" value="courses7 rooms4 10" />
+      <option name="PROGRAM_PARAMETERS" value="courses8 rooms4 10" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -101,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1646008171821</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fixed a warning for unsafe operations/type check.">
+      <created>1646188868830</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1646188868830</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -112,6 +121,7 @@
     <MESSAGE value="Fixed I/O to be executable from command line only. Added more descriptive error messages as well as fixed cases where error messages should be present." />
     <MESSAGE value="Added error messages when arguments are less than or greater than three." />
     <MESSAGE value="Cleaned up the warnings from console when compiling." />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up the warnings from console when compiling." />
+    <MESSAGE value="Fixed a warning for unsafe operations/type check." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a warning for unsafe operations/type check." />
   </component>
 </project>

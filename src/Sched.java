@@ -63,9 +63,8 @@ public class Sched {
                         rooms = fetchRooms(roomFile);
 
                         if(!errorFlag){
-                            new Schedule(new Graph(courses, rooms), slots);
-
                             System.out.println("------ Time Slots ------");
+                            new Schedule(new Graph(courses, rooms), slots);
                         }
                     }else{
                         System.out.println(errorMessage);

@@ -50,7 +50,7 @@ public class Graph{
 
         //Add all courses to hashmap (graph) pointing to an arraylist of vertices, and add to list of vertices
         for(Course c : courses){
-            Vertex v = new Vertex(c.getName(), c);
+            Vertex v = new Vertex(c);
             vertices.add(v);
 
             graph.put(v, new ArrayList<>());
@@ -81,7 +81,6 @@ public class Graph{
 
                             System.out.println("UPDATE: Student " + c.getStudents().get(x) + " is in course " + c.getName() + " and " + deepCourse.getName());
 
-                            //break;
                         }
                     }
                 }
